@@ -2,7 +2,7 @@
 #
 #
 # configuration file - contains customization for exact system
-# 
+#
 #
 
 mailUser = "yourusename"
@@ -22,15 +22,15 @@ DEBUG = False
 # Blynk configuration
 ############
 
-USEBLYNK = False 
-BLYNK_AUTH = 'xxxxx'
+USEBLYNK = False
+BLYNK_AUTH = '1sDn3wotMRogUCvajPUTz_ABuYCuZYB1'
 BLYNK_URL = 'http://blynk-cloud.com/'
 
 ############
 # PubNub configuration
 ############
 
-USEPUBNUB = False 
+USEPUBNUB = False
 Pubnub_Publish_Key = "pub-c-xxxxxx"
 Pubnub_Subscribe_Key = "sub-c-xxxxxx"
 
@@ -50,7 +50,7 @@ manual_water = True
 
 
 ############
-# Moisture Sensor and Pump Count 
+# Moisture Sensor and Pump Count
 ############
 
 plant_number = 1
@@ -58,7 +58,7 @@ moisture_sensor_count = plant_number
 USB_pump_count = plant_number
 
 # R1 - Grove Reliable Resistive Moisture Sensor - SwitchDoc Labs
-# R2 - HONG111 TE215 Dual Mode Resistive Moisture Sensor - Amazon.com 
+# R2 - HONG111 TE215 Dual Mode Resistive Moisture Sensor - Amazon.com
 # C1 - Grove Capacitive Moisture Sensor - SwitchDoc Labs
 
 SensorType = ["C1","C1","C1","C1","C1","C1","C1","C1","C1"]
@@ -106,6 +106,3 @@ AirQualityADPin = 0
 moistureADPin = 1
 moisturePower = 6
 pixelPin = 21
-
-
-

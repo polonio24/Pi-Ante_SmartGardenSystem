@@ -1,4 +1,4 @@
-# 
+#
 # contains all the state variables for SmartPlantPi
 #
 
@@ -13,10 +13,10 @@ except ImportError:
 ##################
 # if False, then English
 # if True, then Metric
-EnglishMetric = True 
+EnglishMetric = True
 
 ##################
-# blynk State Variable 
+# blynk State Variable
 ##################
 
 blynkPlantNumberDisplay = 1
@@ -45,7 +45,7 @@ for i in range(1, config.moisture_sensor_count+1):
 
 #water below this limit
 
-Moisture_Threshold = 50.0   
+Moisture_Threshold = 50.0
 ##################
 # Pump State
 ##################
@@ -81,10 +81,10 @@ AirQuality_Sensor_Text = ""
 ##################
 # Alarm States
 ##################
-Alarm_Temperature = 5.0  
+Alarm_Temperature = 5.0
 Alarm_Moisture = 60.0
 Alarm_Water = False
-Alarm_Air_Quality = 10000 
+Alarm_Air_Quality = 10000
 Alarm_Moisture_Sensor_Fault = 15.0
 
 Alarm_Active = True
@@ -104,7 +104,7 @@ Is_Alarm_WaterEmpty = False
 
 # run rainbow simulation on LEDs
 
-runRainbow = True
+runRainbow = False
 
 # turn LED display on/off
 
@@ -112,7 +112,7 @@ runLEDs = True
 # plant water requests
 
 #-1 means no plant request
-Plant_Number_Water_Request = -1   
+Plant_Number_Water_Request = -1
 
 Plant_Water_Request_Previous = False
 Plant_Water_Request = False
@@ -136,7 +136,3 @@ SGS_Values = ["Idle", "Monitor", "Watering", "Rotary Select", "Rotary", "Alarm",
 SGS_State = SGS_States.Monitor
 
 Last_Event = ""
-
-
-
-
