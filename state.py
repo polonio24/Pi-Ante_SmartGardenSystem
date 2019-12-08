@@ -104,7 +104,7 @@ Is_Alarm_WaterEmpty = False
 
 # run rainbow simulation on LEDs
 
-runRainbow = False
+runRainbow = True
 
 # turn LED display on/off
 
