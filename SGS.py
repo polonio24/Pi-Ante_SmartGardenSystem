@@ -16,8 +16,6 @@ import time
 import threading
 import json
 import pickle
-import sqlite3
-
 
 import logging;
 logging.basicConfig(level=logging.ERROR)
@@ -556,20 +554,6 @@ def publishStateToPubNub():
 
         blinkLED(0,Color(0,255,255),3,0.200)
 
-def configuredb():
-    print "db configured"
-#     conn = sqlite3.connect('piante.db')
-#     c = conn.cursor()
-#     c.execute("""CREATE TABLE datatable (
-#                 degrees NUMERIC,
-#                 humidity NUMERIC,
-#                 moisture NUMERIC,
-#                 sunlight NUMERIC,
-#                 airquality NUMERIC
-#                 )""")
-#     conn.commit()
-#     conn.close()
-    
 
 
 #############################
@@ -577,55 +561,6 @@ def configuredb():
 #############################
 # setup tasks
 #############################
-def add2db():
-    conn = sqlite3.connect('piante.db')
-    c = conn.cursor()
-    
-    degrees= hdc1000.readTemperature()
-    humidity = hdc1000.readHumidity()
-    sunlight = Sunlight_Sensor.readVisible()
-    moisture = state.Moisture_Humidity
-    airq =  AirQualitySensorLibrary.readAirQualitySensor(ads1115)
-    #id INTEGER PRIMARY KEY AUTOINCREMENT, dataora TIME,  pianta NUMERIC ,temperature NUMERIC, humidity NUMERIC , moisture NUMERIC, sunlight NUMERIC, airquality NUMERIC)
-    c.execute("INSERT INTO datatable VALUES (?,?,?,?,?)",(degrees,humidity,moisture,sunlight,airq))
-    conn.commit()
-    print "database aggiornato" 
-    print('------')
-    
-def printValues():
-        degrees= hdc1000.readTemperature()
-        humidity = hdc1000.readHumidity()
-        print 'Temp             = {0:0.3f} deg C'.format(degrees)
-        print 'Humidity         = {0:0.2f} %'.format(humidity)
-        
-        if (config.Sunlight_Present == True):
-                ################
-                SunlightVisible = Sunlight_Sensor.readVisible()
-                SunlightIR = Sunlight_Sensor.readIR()
-                SunlightUV = Sunlight_Sensor.readUV()
-                SunlightUVIndex = SunlightUV / 100.0
-                print 'Sunlight Visible:  ' + str(SunlightVisible)
-                print 'Sunlight IR:       ' + str(SunlightIR)
-                print 'Sunlight UV Index: ' + str(SunlightUVIndex)
-                ################pass
-        #ultrasonicRanger.getAndPrint()
-        print("Plant #1 Moisture = {}").format(state.Moisture_Humidity)
-#         if (config.ADS1115_Present):
-#             GPIO.output(config.moisturePower, GPIO.HIGH)
-#             Moisture_Humidity   = ads1115.readADCSingleEnded(config.moistureADPin, gain, sps)/7 # AIN0 wired to AirQuality Sensor
-#             GPIO.output(config.moisturePower, GPIO.LOW)
-# 
-#             Moisture_Humidity = Moisture_Humidity / 7.0
-#             if (Moisture_Humidity >100): 
-#                 Moisture_Humidity = 100;
-#             print "Moisture Humidity = %0.2f" % (Moisture_Humidity)
-
-        sensor_value =  AirQualitySensorLibrary.readAirQualitySensor(ads1115)
-
-        sensorList = AirQualitySensorLibrary.interpretAirQualitySensor(sensor_value)
-        print "Sensor Value=%i --> %s  | %i"% (sensor_value, sensorList[0], sensorList[1])
-        
-        print('------')
 
 def tick():
     print('Tick! The time is: %s' % datetime.now())
@@ -1218,7 +1153,7 @@ if __name__ == '__main__':
     print "----------------------"
 
 
-    configuredb()
+
     scheduler = BackgroundScheduler()
 
     '''
@@ -1245,10 +1180,6 @@ if __name__ == '__main__':
 
 
     scheduler.add_listener(ap_my_listener, apscheduler.events.EVENT_JOB_ERROR)
-    
-    # print values
-    scheduler.add_job(printValues, 'interval', seconds=6)
-    scheduler.add_job(add2db, 'interval', seconds= 20)
 
 
     # prints out the date and time to console
@@ -1361,8 +1292,8 @@ if __name__ == '__main__':
     	    # here you put any code you want to run before the program
     	    # exits when you press CTRL+C
             print "exiting program"
-            
-            #except:
+
+    #except:
     	    # this catches ALL other exceptions including errors.
     	    # You won't get any error messages for debugging
     	    # so only use it once your code is working
@@ -1371,7 +1302,8 @@ if __name__ == '__main__':
     finally:
 	    #time.sleep(5)
     	    #GPIO.cleanup() # this ensures a clean exit
-            display.clear2()
+        display.clear()
+        display.reset()
 	    stopPump()
             for i in range(2,config.plant_number+1):
                 extendedPlants.turnOffExtendedPump(i, GDE_Ext1, GDE_Ext2)
