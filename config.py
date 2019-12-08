@@ -22,7 +22,7 @@ DEBUG = False
 # Blynk configuration
 ############
 
-USEBLYNK = False
+USEBLYNK = True
 BLYNK_AUTH = '1sDn3wotMRogUCvajPUTz_ABuYCuZYB1'
 BLYNK_URL = 'http://blynk-cloud.com/'
 
