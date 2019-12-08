@@ -1303,6 +1303,7 @@ if __name__ == '__main__':
 	    #time.sleep(5)
     	    #GPIO.cleanup() # this ensures a clean exit
         display.clear()
+        display.reset()
 	    stopPump()
             for i in range(2,config.plant_number+1):
                 extendedPlants.turnOffExtendedPump(i, GDE_Ext1, GDE_Ext2)
