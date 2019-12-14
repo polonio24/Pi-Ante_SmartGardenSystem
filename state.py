@@ -107,8 +107,7 @@ Is_Alarm_WaterEmpty = False
 runRainbow = False
 
 # turn LED display on/off
-
-runLEDs = True
+runLEDs = False
 # plant water requests
 
 #-1 means no plant request

@@ -209,6 +209,11 @@ class SSD1306Base(object):
         """Clear contents of image buffer."""
         self._buffer = [0]*(self.width*self._pages)
 
+    def clear2(self):
+        self._buffer = [0]*(self.width*self._pages)
+        self.command(SSD1306_DISPLAYOFF)                    # 0xAE
+        print('display cleaned and turned off')
+
     def set_contrast(self, contrast):
         """Sets the contrast of the display.  Contrast should be a value between
         0 and 255."""
@@ -241,7 +246,7 @@ class SSD1306_128_64(SSD1306Base):
 
     def _initialize(self):
         # 128x64 pixel specific initialization.
-        self.command(SSD1306_DISPLAYOFF)                    # 0xAE
+        self.command(SSD1306_DISPLAYOFF)                 # 0xAE
         self.command(SSD1306_SETDISPLAYCLOCKDIV)            # 0xD5
         self.command(0x80)                                  # the suggested ratio 0x80
         self.command(SSD1306_SETMULTIPLEX)                  # 0xA8
