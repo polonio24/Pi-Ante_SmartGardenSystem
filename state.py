@@ -45,7 +45,7 @@ for i in range(1, config.moisture_sensor_count+1):
 
 #water below this limit
 
-Moisture_Threshold = 50.0
+Moisture_Threshold = 45.0
 ##################
 # Pump State
 ##################

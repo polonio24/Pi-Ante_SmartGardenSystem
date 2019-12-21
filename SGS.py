@@ -5,7 +5,6 @@
 #
 # SwitchDoc Labs
 #
-
 SGSVERSION = "009"
 #imports
 
@@ -557,59 +556,91 @@ def publishStateToPubNub():
 
 
 
+################
+# DataBase Setup
+################
+def insertVaribleIntoTable(dataora,temperature, humidity, \
+                            sunlightIR, sunlightVisible,sunlightUV, \
+                            airQuality,soilMoisture,tankPCFull):
+    try:
+        sqliteConnection = sqlite3.connect('Piante2.db')
+        cursor = sqliteConnection.cursor()
+        #print("Connected to SQLite")
+
+        sqlite_insert_with_param = """INSERT INTO 'misurazioni'
+                          ('dataora', 'temperature', 'humidity', 'sunlightIR', 'sunlightVisible','sunlightUV','airQuality','soilMoisture','tankPCFull') 
+                          VALUES (?, ?, ?, ?, ?,?,?,?,?);"""
+
+        data_tuple = (dataora,temperature, humidity, 
+                        sunlightIR, sunlightVisible,sunlightUV,
+                        airQuality,soilMoisture,tankPCFull)
+
+        cursor.execute(sqlite_insert_with_param, data_tuple)
+        sqliteConnection.commit()
+        print("--- Data inserted successfully into <misurazioni> table of Piante2.db")
+
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert Python variable into sqlite table of Piante2.db", error)
+    finally:
+        if (sqliteConnection):
+            sqliteConnection.close()
+            #print("The SQLite connection is closed")     
+
+
+
 #############################
 # apscheduler setup
 #############################
 # setup tasks
 #############################
-def add2db():
-    conn = sqlite3.connect('piante.db')
-    c = conn.cursor()
+# def add2db():
+#     conn = sqlite3.connect('piante.db')
+#     c = conn.cursor()
     
-    degrees= hdc1000.readTemperature()
-    humidity = hdc1000.readHumidity()
-    sunlight = Sunlight_Sensor.readVisible()
-    moisture = state.Moisture_Humidity
-    airq =  AirQualitySensorLibrary.readAirQualitySensor(ads1115)
-    #id INTEGER PRIMARY KEY AUTOINCREMENT, dataora TIME,  pianta NUMERIC ,temperature NUMERIC, humidity NUMERIC , moisture NUMERIC, sunlight NUMERIC, airquality NUMERIC)
-    c.execute("INSERT INTO datatable VALUES (?,?,?,?,?)",(degrees,humidity,moisture,sunlight,airq))
-    conn.commit()
-    print "database aggiornato" 
-    print('------')
+#     degrees= hdc1000.readTemperature()
+#     humidity = hdc1000.readHumidity()
+#     SunlightVisible = Sunlight_Sensor.readVisible()
+#     moisture = state.Moisture_Humidity
+#     airq =  AirQualitySensorLibrary.readAirQualitySensor(ads1115)
+#     #id INTEGER PRIMARY KEY AUTOINCREMENT, dataora TIME,  pianta NUMERIC ,temperature NUMERIC, humidity NUMERIC , moisture NUMERIC, sunlight NUMERIC, airquality NUMERIC)
+#     c.execute("INSERT INTO datatable VALUES (?,?,?,?,?)",(degrees,humidity,moisture,sunlight,airq))
+#     conn.commit()
+#     print "database aggiornato" 
+#     print('------')
     
-def printValues():
-        degrees= hdc1000.readTemperature()
+def printAndStoreValues():
+        dataora = datetime.now()
+        temperature= hdc1000.readTemperature()
         humidity = hdc1000.readHumidity()
-        print 'Temp             = {0:0.3f} deg C'.format(degrees)
+
+        sunlightVisible = Sunlight_Sensor.readVisible()
+        sunlightIR = Sunlight_Sensor.readIR()
+        sunlightUV = Sunlight_Sensor.readUV()
+        sunlightUVIndex = sunlightUV / 100.0
+        
+        airQuality =  AirQualitySensorLibrary.readAirQualitySensor(ads1115) 
+        sensorList = AirQualitySensorLibrary.interpretAirQualitySensor(airQuality)
+
+        soilMoisture = state.Moisture_Humidity
+        tankPCFull = state.Tank_Percentage_Full
+
+        # Print on terminal
+        print 'Dataora          = {}'.format(dataora.strftime('%Y-%m-%d %H:%M:%S')) 
+        print 'Temp             = {0:0.3f} deg C'.format(temperature)
         print 'Humidity         = {0:0.2f} %'.format(humidity)
+        print 'Sunlight IR:       ' + str(sunlightIR)
+        print 'Sunlight Visible:  ' + str(sunlightVisible)
+        print 'Sunlight UV Index: ' + str(sunlightUVIndex)
+        print "Sensor Value=%i --> %s  | %i"% (airQuality, sensorList[0], sensorList[1])
+        print("Plant #1 Moisture = {}").format(soilMoisture)
+        print 'Tank Perc. Full   = {} %'.format(tankPCFull)
         
-        if (config.Sunlight_Present == True):
-                ################
-                SunlightVisible = Sunlight_Sensor.readVisible()
-                SunlightIR = Sunlight_Sensor.readIR()
-                SunlightUV = Sunlight_Sensor.readUV()
-                SunlightUVIndex = SunlightUV / 100.0
-                print 'Sunlight Visible:  ' + str(SunlightVisible)
-                print 'Sunlight IR:       ' + str(SunlightIR)
-                print 'Sunlight UV Index: ' + str(SunlightUVIndex)
-                ################pass
-        #ultrasonicRanger.getAndPrint()
-        print("Plant #1 Moisture = {}").format(state.Moisture_Humidity)
-#         if (config.ADS1115_Present):
-#             GPIO.output(config.moisturePower, GPIO.HIGH)
-#             Moisture_Humidity   = ads1115.readADCSingleEnded(config.moistureADPin, gain, sps)/7 # AIN0 wired to AirQuality Sensor
-#             GPIO.output(config.moisturePower, GPIO.LOW)
-# 
-#             Moisture_Humidity = Moisture_Humidity / 7.0
-#             if (Moisture_Humidity >100): 
-#                 Moisture_Humidity = 100;
-#             print "Moisture Humidity = %0.2f" % (Moisture_Humidity)
+        insertVaribleIntoTable(dataora,temperature, humidity, \
+                            sunlightIR, sunlightVisible,sunlightUV, \
+                            airQuality,soilMoisture,tankPCFull)
 
-        sensor_value =  AirQualitySensorLibrary.readAirQualitySensor(ads1115)
-
-        sensorList = AirQualitySensorLibrary.interpretAirQualitySensor(sensor_value)
-        print "Sensor Value=%i --> %s  | %i"% (sensor_value, sensorList[0], sensorList[1])
-        
         print('------')
 
 
@@ -1232,12 +1263,12 @@ if __name__ == '__main__':
     scheduler.add_listener(ap_my_listener, apscheduler.events.EVENT_JOB_ERROR)
 
     # print values
-    scheduler.add_job(printValues, 'interval', seconds=6)
-    scheduler.add_job(add2db, 'interval', seconds= 20)
+    scheduler.add_job(printAndStoreValues, 'interval', seconds=10)
+    #scheduler.add_job(add2db, 'interval', seconds= 20)
 
 
     # prints out the date and time to console
-    scheduler.add_job(tick, 'interval', seconds=60)
+    #scheduler.add_job(tick, 'interval', seconds=60)
 
     # blink optional life light
     scheduler.add_job(blinkLED, 'interval', seconds=5, args=[0,Color(0,0,255),1,0.250])
