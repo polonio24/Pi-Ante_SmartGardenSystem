@@ -8,3 +8,5 @@ tx*
 nohup.out
 .*DS_Store
 conflocal.py
+*.db
+*.db-journal
