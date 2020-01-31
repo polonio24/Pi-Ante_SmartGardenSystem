@@ -70,7 +70,7 @@ Resistor2SensorCalibration = [460,131]
 Capacitor1SensorCalibration = [ [363,150], [363,150], [363,150], [363,150], [363,150], [363,150],[363,150], [363,150], [363,150]]
 
 # if your pumps stick up too high, adjust this value so tank will still ready empty
-Tank_Pump_Level = 15.0
+Tank_Pump_Level = 10.0
 
 ############
 # device present global variables

@@ -45,7 +45,7 @@ for i in range(1, config.moisture_sensor_count+1):
 
 #water below this limit
 
-Moisture_Threshold = 45.0
+Moisture_Threshold = 60.0
 ##################
 # Pump State
 ##################
@@ -57,9 +57,13 @@ Pump_Water_Full = False
 # Tank State
 ##################
 
+# Tank_Level = 5.0
+# Tank_Empty_Level = 10.0
+# Tank_Full_Level = 2.0
+# Tank_Percentage_Full = 30.0
 Tank_Level = 5.0
-Tank_Empty_Level = 10.0
-Tank_Full_Level = 2.0
+Tank_Empty_Level = 14.8
+Tank_Full_Level = 9.5
 Tank_Percentage_Full = 30.0
 
 ##################
@@ -107,6 +111,7 @@ Is_Alarm_WaterEmpty = False
 runRainbow = False
 
 # turn LED display on/off
+
 runLEDs = False
 # plant water requests
 

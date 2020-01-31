@@ -201,14 +201,15 @@ def waterPlant(plantNumber):
             # We want to put off this state if Update State is .is locked.   That will prevent Update State from being hosed by this state machine
             if (config.DEBUG):
                   print "WP-Attempt Aquire"
-	    UpdateStateLock.acquire()
+
+            UpdateStateLock.acquire()
             if (config.DEBUG):
                   print "WP-UpdateStateLock acquired"
 
 
 
             previousState = state.SGS_State;
-	    #if(state.SGS_State == state.SGS_States.Monitor):
+	          #if(state.SGS_State == state.SGS_States.Monitor):
             state.SGS_State =state.SGS_States.Watering
             if (config.USEPUBNUB):
                 publishStatusToPubNub()
@@ -236,6 +237,7 @@ def waterPlant(plantNumber):
                 updateBlynk.blynkStatusUpdate()
             if (config.DEBUG):
                   print "WP-Attempt released"
+
             UpdateStateLock.release()
             if (config.DEBUG):
                   print "WP-UpdateStateLock released"
@@ -662,12 +664,12 @@ def checkAndWater():
         if (config.DEBUG):
             print "checkandWater: Plant#%i %0.2f Threshold / %0.2f Current" % (i,state.Moisture_Threshold, state.Moisture_Humidity_Array[i-1])
         if (state.Moisture_Humidity_Array[i-1] <= state.Alarm_Moisture_Sensor_Fault):
-	      print "No Watering Plant #%i - Moisture Sensor Fault Detected!"	% (i)
+	          print "No Watering Plant #%i - Moisture Sensor Fault Detected!"	% (i)
         else:
-    	    if (state.Moisture_Threshold > state.Moisture_Humidity_Array[i-1]):
+            if (state.Moisture_Threshold > state.Moisture_Humidity_Array[i-1]):
                 if (config.DEBUG):
-	    	    print "Attempting to Watering Plant"
-            	waterPlant(i);
+                    print "Attempting to Watering Plant"
+                waterPlant(i);
 
 def forceWaterPlantCheck():
     if ((state.Plant_Water_Request == True) and (state.Plant_Number_Water_Request > 0)):
